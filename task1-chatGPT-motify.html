@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geolocation Example</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #2c2c2c;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        #location {
+            font-size: 18px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button id="getLocationBtn">Show My Location</button>
+    <div id="location">Click the button to get your current location.</div>
+
+    <script>
+        const locationDiv = document.getElementById('location');
+        const button = document.getElementById('getLocationBtn');
+
+        // Function to handle success in geolocation retrieval
+        function showPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            locationDiv.innerHTML = `Latitude: ${latitude} <br> Longitude: ${longitude}`;
+        }
+
+        // Function to handle errors in geolocation retrieval
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    locationDiv.textContent = "User denied the request for Geolocation.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    locationDiv.textContent = "Location information is unavailable.";
+                    break;
+                case error.TIMEOUT:
+                    locationDiv.textContent = "The request to get user location timed out.";
+                    break;
+                default:
+                    locationDiv.textContent = "An unknown error occurred.";
+            }
+        }
+
+        // Function to get the user's location
+        button.addEventListener('click', () => {
+            if (navigator.geolocation) {
+                locationDiv.textContent = "Getting location...";
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                locationDiv.textContent = "Geolocation is not supported by this browser.";
+            }
+        });
+    </script>
+
+</body>
+
+</html>
